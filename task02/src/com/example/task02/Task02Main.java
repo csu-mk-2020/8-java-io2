@@ -22,6 +22,7 @@ public class Task02Main {
     public static List<Path> listFiles(Path rootDir) throws IOException, InterruptedException {
         // your implementation here
         Objects.requireNonNull(rootDir);
+
         return Files.find(rootDir,Integer.MAX_VALUE,(path,bfa)->bfa.isRegularFile()).collect(Collectors.toList());
     }
 }
