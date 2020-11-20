@@ -15,21 +15,26 @@ public class Task01Main {
 
     }
 
-    public static String extractSoundName(File file) throws IOException {
+    public static String extractSoundName(File file) throws IOException, InterruptedException{
         // your implementation here
-        String[] strings = {"ffprobe", "-v", "error", "-of", "flat", "-show_format", file.toString()};
-        ProcessBuilder processBuilder = new ProcessBuilder(strings)
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("F:\\dowmload\\ffmpeg-4.3.1-2020-11-08-full_build\\ffmpeg-4.3.1-2020-11-08-full_build\\bin\\ffprobe", "-v", "error", "-of", "flat", "-show_format", file.toString())
                 .redirectError(ProcessBuilder.Redirect.INHERIT)
                 .redirectOutput(ProcessBuilder.Redirect.PIPE);
         Process process = processBuilder.start();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        int exitValue = process.waitFor();
+        if(exitValue!=0){
+            System.out.println("Subprocess fail");
+            return "";
+        }
 
-
-        String str;
-        while ((str = reader.readLine())!=null){
-            if (str.matches("format.tags.title=.*")){
-                return str.replaceFirst("format.tags.title=","").replaceAll("\"","");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))){
+            String str;
+            while ((str = reader.readLine())!=null){
+                if (str.matches("format.tags.title=.*")){
+                    return str.replaceFirst("format.tags.title=","").replaceAll("\"","");
+                }
             }
         }
         return "";
