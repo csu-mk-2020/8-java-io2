@@ -18,7 +18,7 @@ public class Task01Main {
     public static String extractSoundName(File file) throws IOException, InterruptedException{
         // your implementation here
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("F:\\dowmload\\ffmpeg-4.3.1-2020-11-08-full_build\\ffmpeg-4.3.1-2020-11-08-full_build\\bin\\ffprobe", "-v", "error", "-of", "flat", "-show_format", file.toString())
+        processBuilder.command("ffprobe", "-v", "error", "-of", "flat", "-show_format", file.toString())
                 .redirectError(ProcessBuilder.Redirect.INHERIT)
                 .redirectOutput(ProcessBuilder.Redirect.PIPE);
         Process process = processBuilder.start();
